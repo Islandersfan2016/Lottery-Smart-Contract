@@ -1,8 +1,6 @@
 pragma solidity ^0.5.2;
 
 contract Lottery{
-    //dynamic array with players payable addresses
-    //in solidity version newer than 0.5.0 an address must be payable to be able to receive funds (using the transfer function)
     address payable[] public players; 
     
     address public manager; //contract manager
@@ -15,7 +13,6 @@ contract Lottery{
     
     //this fallback payable function will be automatically called when somebody
     //sends ether to our contract address
-    //since solidity 0.5.0 it's mandatory to be external
     function () payable external{
         require(msg.value >= 0.01 ether);
         players.push(msg.sender); //add the address of the account that sends
@@ -29,9 +26,7 @@ contract Lottery{
     
     //returns a very big pseodo-random integer no.
     function random() public view returns(uint256){
-        
-       //since solidity 0.5.0  keccak256() function accepts only a single bytes argument
-       //we use the abi.encodePacked() function to get the bytes argument from 3 values
+       
        return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, players.length)));
     }
     
